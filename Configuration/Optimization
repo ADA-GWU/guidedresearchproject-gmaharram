@@ -15,3 +15,7 @@ sudo vim /opt/postgres/data/postgresql.auto.conf
     work_mem = 5242kB
     min_wal_size = 1GB
     max_wal_size = 4GB
+
+
+sudo systemctl restart postgresql-13
+sudo systemctl status postgresql-13
