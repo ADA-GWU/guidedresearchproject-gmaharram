@@ -1,0 +1,42 @@
+// Create new VM with 8GB RAM and 2 Cores by 2 CPU and CentOS 8 OS and Create an OS user for PostgreSQL.
+
+sudo yum update -y 
+useradd postgres
+passwd postgres             --for now (123456)
+sudo visudo
+     postgres ALL=(ALL)  ALL
+sudo systemctl daemon-reload
+su - postgres     
+sudo systemctl stop firewalld
+sudo systemctl disable firewalld
+sudo yum install vim -y
+sudo hostnamectl set-hostname <name>
+
+//Stop firewall for connection  -- will be changed later
+sudo systemctl stop firewalld
+sudo systemctl disable firewalld
+
+//Create folders for data and wal as a postgres use 
+sudo mkdir -p /opt/postgres/data
+sudo chown -R postgres:postgres /opt/postgres/data
+sudo mkdir -p /opt/postgres/walarchive
+sudo chown -R postgres:postgres /opt/postgres/walarchive
+sudo chmod -R 775 /opt/postgres/walarchive/
+
+
+// Install PostgreSQL packages
+sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+sudo dnf -qy module disable postgresql
+sudo dnf install -y postgresql13-server
+
+//Change data directory in PostgreSQL environment file as shown below
+sudo vim /lib/systemd/system/postgresql-13.service
+    Environment=PGDATA=/opt/postgres/data/
+sudo systemctl daemon-reload
+
+//Initialize database
+/usr/pgsql-13/bin/postgresql-13-setup initdb
+
+//Enable and start database
+systemctl enable postgresql-13
+systemctl start postgresql-13
