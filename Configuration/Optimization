@@ -3,19 +3,43 @@ sudo vim /opt/postgres/data/postgresql.auto.conf
     max_connections = '500'
     archive_mode = 'on'
     archive_command = 'test ! -f /opt/postgres/walarchive/%f && cp %p /opt/postgres/walarchive/%f'
-    shared_buffers = 2GB
-    shared_buffers = 2GB
-    effective_cache_size = 6GB
-    maintenance_work_mem = 512MB
-    checkpoint_completion_target = 0.9
-    wal_buffers = 16MB
-    default_statistics_target = 100
-    random_page_cost = 1.1
-    effective_io_concurrency = 200
-    work_mem = 5242kB
-    min_wal_size = 1GB
-    max_wal_size = 4GB
 
+# Connectivity
+max_connections = 100
+superuser_reserved_connections = 3
+
+# Memory Settings
+shared_buffers = '2048 MB'
+work_mem = '32 MB'
+maintenance_work_mem = '320 MB'
+huge_pages = off
+effective_cache_size = '6 GB'
+effective_io_concurrency = 100 # concurrent IO only really activated if OS supports posix_fadvise function
+random_page_cost = 1.25 # speed of random disk access relative to sequential access (1.0)
+
+# Replication
+wal_level = replica # consider using at least 'replica'
+max_wal_senders = 0
+synchronous_commit = on
+
+# WAL writing
+wal_compression = on
+wal_buffers = -1 # auto-tuned by Postgres till maximum of segment size (16MB by default)
+wal_writer_delay = 200ms
+wal_writer_flush_after = 1MB
+
+# Background writer
+bgwriter_delay = 200ms
+bgwriter_lru_maxpages = 100
+bgwriter_lru_multiplier = 2.0
+bgwriter_flush_after = 0
+
+# Parallel queries:
+max_worker_processes = 4
+max_parallel_workers_per_gather = 2
+max_parallel_maintenance_workers = 2
+max_parallel_workers = 4
+parallel_leader_participation = on
 
 sudo systemctl restart postgresql-13
 sudo systemctl status postgresql-13
