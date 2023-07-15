@@ -1,0 +1,11 @@
+// Some modifications in pg_hba.conf file to enable to connect database from outside
+
+sudo vim /opt/postgres/data/pg_hba.conf
+        host    all     all     0.0.0.0/0       md5
+        host    all     all     ::1/128         md5
+
+sudo su - postgres -c psql
+select pg_reload_conf();
+
+
+
