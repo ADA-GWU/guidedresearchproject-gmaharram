@@ -8,3 +8,7 @@ sudo dpkg-reconfigure slapd
 
 sudo ldapadd -x -D cn=admin,dc=example,dc=com -w <admin password> -f base.ldif
 ldapsearch -x -b dc=example,dc=com -D cn=admin,dc=example,dc=com -w <admin password>
+ldapwhoami -x -D cn=<user>,dc=example,dc=com -w <user password>
+
+
+ldapwhoami -h ldap.example.com -D "cn=admin,dc=example,dc=com" -w "adminpassword"
