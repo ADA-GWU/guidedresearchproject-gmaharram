@@ -3,4 +3,8 @@ sudo apt install postgresql postgresql-contrib -y
 sudo -i -u postgres
 
 sudo apt-get install ldap-utils -y
-ldapsearch -x -LLL -h 192.168.55.200 -D ldap@companyname -w 'password!' -b "dc=companyname,dc=local
+sudo dpkg-reconfigure slapd
+
+
+sudo ldapadd -x -D cn=admin,dc=example,dc=com -w <admin password> -f base.ldif
+ldapsearch -x -b dc=example,dc=com -D cn=admin,dc=example,dc=com -w <admin password>
