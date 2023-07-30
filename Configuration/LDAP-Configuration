@@ -1,0 +1,6 @@
+sudo apt update
+sudo apt install postgresql postgresql-contrib -y
+sudo -i -u postgres
+
+sudo apt-get install ldap-utils -y
+ldapsearch -x -LLL -h 192.168.55.200 -D ldap@companyname -w 'password!' -b "dc=companyname,dc=local
